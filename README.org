@@ -1,0 +1,43 @@
+#+TITLE: Org Share development plan
+
+* Backend Overview
+
+  This is my first REST API I've ever made...
+
+** Description
+
+  The end product I'm looking for is to have a website with the following workflow:
+  
+  - lets users anonymously upload an org-mode notes
+
+  - they also get to choose a theme for the notes from a menu
+
+  - then they receive an IMGUR-style generated link of the generated, themed notes
+  
+  In order to support this, the REST API should let users POST their document and desired theme, and the browser should retrieve the link to it once it's been generated
+	
+** Considerations
+
+   
+   * Should I allow account creation? Initially I should probably only let me use it through log in
+   
+   * How do I map the file to the ID? I could do a document store thing. Though I need to ensure persistence
+
+	 * Could just hash each file with like md5 and then try to store it in the filesystem. There's probably a way to do this already
+
+   * Maximum filesize: 5k word of lorem ipsum is like 33kbytes. So a 35kbyte limit is reasonable.
+
+   
+** Rough API
+
+*** POST File
+
+	POST a file and the 
+
+** Useful links
+   
+   * [[https://stackoverflow.com/questions/22072773/batch-export-of-org-mode-files-from-the-command-line][Export notes from command line]]
+   
+   * [[https://github.com/fniessen/org-html-themes][Org themes]]
+
+   * [[https://animesh.blog/ef-core-code-first-with-postgres/][EF code first]]
