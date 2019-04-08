@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Backend.Migrations
@@ -13,7 +14,7 @@ namespace Backend.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    File = table.Column<string>(nullable: true)
+                    FileData = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {

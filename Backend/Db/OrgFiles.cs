@@ -7,6 +7,6 @@ namespace Backend.Db
     {
         [Key]
         public int Id { get; set; }
-        public string File { get; set; }
+        public byte[] FileData { get; set; }
     }
 }

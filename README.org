@@ -32,7 +32,7 @@
 
 *** POST File
 
-	POST a file and the 
+	POST a file and then URL is returned
 
 ** Useful links
    
