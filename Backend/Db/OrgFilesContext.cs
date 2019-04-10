@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Backend.Db
 {  
@@ -18,10 +19,6 @@ namespace Backend.Db
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
             string conn = GetConnectionStringByName("orgfiledb");
-            // Console.WriteLine($"IT'S THAT CON!!! {conn}");
-            // if (conn == null) {
-            //     Console.WriteLine("bad");
-            // }
             builder.UseNpgsql(conn);
         }
 
