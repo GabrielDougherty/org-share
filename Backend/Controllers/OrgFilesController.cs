@@ -45,8 +45,9 @@ namespace Backend.Controllers
 
         // POST api/orgFiles
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody] List<IFormFile> files)
+        public async Task<IActionResult> Post([FromForm] List<IFormFile> files)
         {
+            Console.WriteLine("GOT HERE");
             if (files.Count > 1 || files.Count == 0)
             {
                 return BadRequest();
