@@ -1,0 +1,14 @@
+#+TITLE: TODO
+
+* Now
+
+- Refactor controller so inserting into database is separate (probably)
+- Return URI from POST, not ID
+- Convert with emacs/pandoc/whatever to pretty HTML
+- Use IMGUR-style URL => need translation layer between hash thing and autoincrement ID. Or something else
+
+* Later
+
+- Add auth/login (required for public release)
+- Frontend
+

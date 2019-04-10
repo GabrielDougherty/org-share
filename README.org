@@ -19,20 +19,34 @@
 ** Considerations
 
    
-   * Should I allow account creation? Initially I should probably only let me use it through log in
+   - Should I allow account creation? Initially I should probably only let me use it through log in
    
-   * How do I map the file to the ID? I could do a document store thing. Though I need to ensure persistence
+   - Maximum filesize: 5k word of lorem ipsum is like 33kbytes. So a 35kbyte limit is reasonable.
 
-	 * Could just hash each file with like md5 and then try to store it in the filesystem. There's probably a way to do this already
+   - Should I use emacs for conversion? That's probably stupid. I could convert with Pandoc but there would be some info lost maybe/probably
 
-   * Maximum filesize: 5k word of lorem ipsum is like 33kbytes. So a 35kbyte limit is reasonable.
 
-   
+** Database
+
+   - File is just uploaded to a column in a PostgreSQL table, given autoincrement ID
+
 ** Rough API
 
 *** POST File
 
 	POST a file and then URL is returned
+
+** Testing API
+
+*** POST
+
+#+BEGIN_SRC bash
+
+# run the server in another window, then
+cd test
+curl -k -F "files=@test-org.org" https://localhost:5001/api/orgFiles
+
+#+END_SRC
 
 ** Useful links
    
@@ -41,3 +55,19 @@
    * [[https://github.com/fniessen/org-html-themes][Org themes]]
 
    * [[https://animesh.blog/ef-core-code-first-with-postgres/][EF code first]]
+
+** Installation
+
+   Later I'll have a more solid installation procedure
+
+   Install `dotnet-sdk-22` and postgres then
+
+#+BEGIN_SRC bash
+
+git clone https://github.com/GabrielDougherty/org-share.git
+cd org-share
+dotnet restore
+
+#+END_SRC
+
+   Also use the create_tables script to create the tables
