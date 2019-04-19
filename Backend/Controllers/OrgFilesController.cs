@@ -8,6 +8,7 @@ using Backend.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Backend.Utils;
 
 namespace Backend.Controllers
 {
@@ -37,43 +38,58 @@ namespace Backend.Controllers
 
         // GET api/orgFiles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<string>> Get(int id)
+        public async Task<ActionResult<byte[]>> Get(int id)
         {
-            // await _orgRepository.GetOrgFileById(id);
-            return "test";
+            var file = await _orgRepository.GetOrgFileById(id);
+            string name = $"Result-{file.Id}.html";
+            return File(file.FileData,"application/octet-stream",name);
+            // return "test";
         }
 
         // POST api/orgFiles
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] List<IFormFile> files)
         {
-            Console.WriteLine("GOT HERE");
+            // Investigate just taking a single IFormFile as argument instead
             if (files.Count > 1 || files.Count == 0)
             {
                 return BadRequest();
             }
 
-            var file = files[0];
+            var inputFile = files[0];
 
-            Console.WriteLine(file.ContentType);
+            Console.WriteLine(inputFile.ContentType);
 
-            if (file.Length == 0)
+            if (inputFile.Length == 0)
             {
                 return BadRequest();
             }
 
-            byte[] fileBytes;
+            string tmpInputPath = Path.GetTempFileName();
+            string tmpOutputPath = Path.GetTempFileName();
 
-            // convert to bytes
+            using (FileStream tmpInputFile = System.IO.File.Create(tmpInputPath))       
+            //using (var htmlMs = new MemoryStream())
+            {
+                await inputFile.CopyToAsync(tmpInputFile);
+            }
+            string panCmd = $"pandoc -s -f org -t html -o {tmpOutputPath} {tmpInputPath}";
+            panCmd.RunCommand();
+
+            
+            byte[] htmlFileBytes;
+
+            // convert to in-memory bytes
+            using (FileStream tmpOutputFile = System.IO.File.Open(tmpOutputPath, FileMode.Open))
             using (var ms = new MemoryStream())
             {
-                await file.CopyToAsync(ms);
-                fileBytes = ms.ToArray();
+                await tmpOutputFile.CopyToAsync(ms);
+                htmlFileBytes = ms.ToArray();
             }
 
             using (var context = new OrgFilesContext())
             {
-                var uploadFile = new OrgFile {FileData = fileBytes};
+                var uploadFile = new OrgFile {FileData = htmlFileBytes};
                 context.OrgFiles.Add(uploadFile);
                 await context.SaveChangesAsync();
                 return Ok(uploadFile.Id);
