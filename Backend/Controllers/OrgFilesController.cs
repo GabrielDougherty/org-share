@@ -74,7 +74,7 @@ namespace Backend.Controllers
                 await inputFile.CopyToAsync(tmpInputFile);
             }
             string panCmd = $"pandoc -s -f org -t html -o {tmpOutputPath} {tmpInputPath}";
-            panCmd.RunCommand();
+            await panCmd.RunCommand();
 
             
             byte[] htmlFileBytes;
