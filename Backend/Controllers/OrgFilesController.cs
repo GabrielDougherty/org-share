@@ -42,7 +42,7 @@ namespace Backend.Controllers
         {
             var file = await _orgRepository.GetOrgFileById(id);
             string name = $"Result-{file.Id}.html";
-            return File(file.FileData,"application/octet-stream",name);
+            return File(file.FileData,"text/html");
             // return "test";
         }
 
