@@ -6,15 +6,15 @@
 
 ** Description
 
-  The end product I'm looking for is to have a website with the following workflow:
+   The end product I'm looking for is to have a website with the following workflow:
   
-  - lets users anonymously upload an org-mode notes
+   - lets users anonymously upload an org-mode notes
 
-  - they also get to choose a theme for the notes from a menu
+   - they also get to choose a theme for the notes from a menu
 
-  - then they receive an IMGUR-style generated link of the generated, themed notes
-  
-  In order to support this, the REST API should let users POST their document and desired theme, and the browser should retrieve the link to it once it's been generated
+   - then they receive an IMGUR-style generated link of the generated, themed notes
+
+   In order to support this, the REST API should let users POST their document and desired theme, and the browser should retrieve the link to it once it's been generated
 	
 ** Considerations
 
@@ -30,23 +30,95 @@
 
    - File is just uploaded to a column in a PostgreSQL table, given autoincrement ID
 
-** Rough API
+** Installation
 
-*** POST File
+   Later I'll have a more solid installation procedure
 
-	POST a file and then URL is returned
+   Install `dotnet-sdk-22` and postgres then
 
-** Testing API
+   #+BEGIN_SRC bash
+git clone https://github.com/GabrielDougherty/org-share.git
+cd org-share/Backend
+dotnet restore
+   #+END_SRC
+
+   Also use the create_tables script to create the tables
+	 
+** Running the server
+
+   Get the server started with:
+
+   #+BEGIN_SRC bash
+# in org-share
+cd Backend
+dotnet run
+   #+END_SRC
+
+** Rough API Description
+
+*** Upload Org File
+
+	POST a file and then id of converted file is returned
+
+	Example Upload:
+
+	#+BEGIN_SRC bash
+	curl -k -F "files=@test-org.org" https://localhost:5001/api/orgFiles
+	#+END_SRC
+
+	Response:
+
+	#+BEGIN_SRC 
+	2
+	#+END_SRC
+
+	
+*** Retrieve HTML File
+
+	GET a published HTML file
+
+	Example retrieval:
+
+	#+BEGIN_SRC bash
+	curl -k https://localhost:5001/api/orgFiles/2
+	#+END_SRC
+
+	Response:
+
+	#+BEGIN_SRC html
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>This is a test file</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<header>
+<h1 class="title">This is a test file</h1>
+</header>
+<h1 id="hello">Hello!!!</h1>
+<p>Testing, testing 123</p>
+</body>
+</html>
+	#+END_SRC
+
+** API Testing
 
 *** POST
 
-#+BEGIN_SRC bash
-
-# run the server in another window, then
+	#+BEGIN_SRC bash
+# run the server in another window, then in org-share
 cd test
 curl -k -F "files=@test-org.org" https://localhost:5001/api/orgFiles
-
-#+END_SRC
+	#+END_SRC
 
 ** Useful links
    
@@ -56,18 +128,3 @@ curl -k -F "files=@test-org.org" https://localhost:5001/api/orgFiles
 
    * [[https://animesh.blog/ef-core-code-first-with-postgres/][EF code first]]
 
-** Installation
-
-   Later I'll have a more solid installation procedure
-
-   Install `dotnet-sdk-22` and postgres then
-
-#+BEGIN_SRC bash
-
-git clone https://github.com/GabrielDougherty/org-share.git
-cd org-share
-dotnet restore
-
-#+END_SRC
-
-   Also use the create_tables script to create the tables
