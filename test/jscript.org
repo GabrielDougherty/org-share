@@ -1,0 +1,18 @@
+#+TITLE: Testing script injection
+* This is a test to see if script injection would happen with my website.
+  Just send this to my API and see if Javascript becomes embedded in my site
+
+  With code tags:
+
+  #+BEGIN_SRC 
+<script>
+alert("hello stupid");
+</script>
+
+  #+END_SRC
+
+  Without them:
+
+  <script>
+  alert("hello stupid");
+  </script>
